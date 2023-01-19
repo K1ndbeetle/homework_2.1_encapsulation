@@ -12,10 +12,35 @@ public class Car {
     private String regNumber;
     private final int cabinCapacity;
     private boolean tireSeason;
+    private Key key;
+
+    public static class Key {
+        private final boolean remoteStart;
+        private final boolean keylessEntry;
+
+        public Key(boolean remoteStart, boolean keylessEntry) {
+            this.remoteStart = remoteStart;
+            this.keylessEntry = keylessEntry;
+        }
+
+        public boolean isRemoteStart() {
+            return remoteStart;
+        }
+
+        public boolean isKeylessEntry() {
+            return keylessEntry;
+        }
+
+        @Override
+        public String toString() {
+            return ", удаленный запуск двигателя: " + (remoteStart ? "есть" : "нет") +
+                    ", бесключевой доступ: " + (keylessEntry ? "есть" : "нет") + ".";
+        }
+    }
 
     public Car(String brand, String model, double engineVolume, String color, int productionYear,
                String productionCountry, String gearbox, String bodyType, String regNumber, int cabinCapacity,
-               boolean tireSeason) {
+               boolean tireSeason, Key key) {
         if (brand == "" || brand == null || brand == "null") {
             this.brand = "default";
         } else this.brand = brand;
@@ -39,6 +64,7 @@ public class Car {
             this.cabinCapacity = 5;
         } else this.cabinCapacity = cabinCapacity;
         this.tireSeason = tireSeason;
+        setKey(key);
 
     }
 
@@ -114,6 +140,17 @@ public class Car {
         this.tireSeason = tireSeason;
     }
 
+    public Car.Key getKey() {
+        return key;
+    }
+
+    public void setKey(Key key) {
+        if (key == null){
+            key = new Key(false, false);
+        }
+        this.key = key;
+    }
+
     public void tireSeason(int month) {
         if ((month >= 11 && month <= 12) || (month >= 1 && month <= 3)) {
             tireSeason = false;
@@ -129,6 +166,6 @@ public class Car {
                 "Марка " + brand + ", модель " + model + ", объём двигателя - " + engineVolume + " л.с." +
                 ", цвет " + color + ", год выпуска " + productionYear + ", страна производства " + productionCountry +
                 ", коробка передач " + gearbox + ", тип кузова " + bodyType + ", регистрационный номер " + regNumber +
-                ", количество мест " + cabinCapacity + ", " + (tireSeason ? "летняя" : "зимняя") + " резина" + ".";
+                ", количество мест " + cabinCapacity + ", " + (tireSeason ? "летняя" : "зимняя") + " резина" + key;
     }
 }
